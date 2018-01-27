@@ -1,8 +1,19 @@
-# FROM johnpapa/angular-cli as angular-built
-# Using the above image allows us toskip the angular-cli install
 FROM node:8.9-alpine as angular-built
 WORKDIR /usr/src/app
-RUN npm install -g --unsafe-perm --verbose @angular/cli
+
+LABEL authors="John Papa"
+
+#Linux setup
+RUN apk update \
+  && apk add --update alpine-sdk \
+  && apk del alpine-sdk \
+  && rm -rf /tmp/* /var/cache/apk/* *.tar.gz ~/.npm \
+  && npm cache verify \
+  && sed -i -e "s/bin\/ash/bin\/sh/" /etc/passwd
+
+#Angular CLI
+RUN npm install -g @angular/cli@1.5.5
+
 COPY package.json package.json
 RUN npm install --silent
 COPY . .
