@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  docker-angular-cli:
+    image: connelb/docker-angular-cli-example
+    build: .
+    environment:
+      NODE_ENV: production
